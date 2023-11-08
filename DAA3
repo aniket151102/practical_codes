@@ -1,0 +1,39 @@
+import time
+
+def fractional_knapsack(items, capacity):
+    for item in items:
+        item['ratio'] = item['value'] / item['weight']
+    items.sort(key=lambda x: x['ratio'], reverse=True)
+    total_value = 0
+    knapsack = []   
+    for item in items:
+        if capacity >= item['weight']:
+            knapsack.append(item)
+            total_value += item['value']
+            capacity -= item['weight']
+        else:
+            fraction = capacity / item['weight']
+            knapsack.append({'name': item['name'], 'weight': capacity, 'value': fraction * item['value']})
+            total_value += fraction * item['value']
+            break
+    return knapsack, total_value
+
+num_items = int(input("Enter the number of items: "))
+items = []
+for i in range(num_items):
+    name = input("Enter the name of item {}: ".format(i + 1))
+    weight = float(input("Enter the weight of item {} in kg: ".format(i + 1))
+    value = float(input("Enter the value of item {}: ".format(i + 1))
+    items.append({'name': name, 'weight': weight, 'value': value})
+
+capacity = float(input("Enter the capacity of the knapsack in kg: "))
+start_time = time.time()
+knapsack, total_value = fractional_knapsack(items, capacity)
+end_time = time.time()
+
+print("\nSelected items in the knapsack:")
+for item in knapsack:
+    print(f"Name: {item['name']}, Weight: {item['weight']} kg, Value: {item['value']}")
+
+print("Total value: {:.2f}".format(total_value))
+print(f"Fractional Knapsack Time: {end_time - start_time:.6f} seconds")
